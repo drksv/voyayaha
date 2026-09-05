@@ -1,26 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { fetchVillageExperiences } from "@/lib/travel-api";
 
-export const Route = createFileRoute("/village-tourism")({ component: VillageTourismPage });
+type VillageSearch = { q?: string };
+export const Route = createFileRoute("/village-tourism")({
+  validateSearch: (search: Record<string, unknown>): VillageSearch => {
+    const q = search["q"];
+    return typeof q === "string" && q ? { q } : {};
+  },
+  component: VillageTourismPage,
+});
 
 function VillageTourismPage() {
-  const [location, setLocation] = useState("");
+  const { q } = Route.useSearch();
+  const [location, setLocation] = useState(q ?? "");
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function search() {
-    if (!location.trim()) return;
+  useEffect(() => { if (q?.trim()) void searchLocation(q); }, [q]);
+
+  async function searchLocation(value: string) {
+    if (!value.trim()) return;
     setLoading(true); setError("");
     try {
-      const result = await fetchVillageExperiences(location);
+      const result = await fetchVillageExperiences(value);
       setItems(Array.isArray(result) ? result : result.experiences || []);
     } catch (e) {
       console.error(e);
       setError("Village experiences are unavailable right now. Please try again later.");
     } finally { setLoading(false); }
   }
+
+  async function search() { await searchLocation(location); }
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
