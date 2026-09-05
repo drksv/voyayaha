@@ -1,18 +1,27 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import trails from "@/data/hiking-trails.json";
 import { HikingTrailsMap } from "@/components/travel/hiking-trails-map";
 
-export const Route = createFileRoute("/hiking-trails")({ component: HikingTrailsPage });
+type HikingSearch = { q?: string };
+export const Route = createFileRoute("/hiking-trails")({
+  validateSearch: (search: Record<string, unknown>): HikingSearch => {
+    const q = search["q"];
+    return typeof q === "string" && q ? { q } : {};
+  },
+  component: HikingTrailsPage,
+});
 type Trail = (typeof trails)[number];
 
 function HikingTrailsPage() {
-  const [city, setCity] = useState("");
+  const { q } = Route.useSearch();
+  const [city, setCity] = useState(q ?? "");
   const [difficulty, setDifficulty] = useState("All");
   const [surface, setSurface] = useState("All");
   const [selectedId, setSelectedId] = useState(trails[0]?.id ?? 1);
   const cities = useMemo(() => Array.from(new Set(trails.map(t => t.city).filter(Boolean))).sort(), []);
   const surfaces = useMemo(() => Array.from(new Set(trails.map(t => t.surface).filter(s => s && s !== "unknown"))).sort(), []);
+  useEffect(() => { if (q?.trim()) setCity(q); }, [q]);
   const filtered = useMemo(() => trails.filter(t => (!city || t.city.toLowerCase().includes(city.toLowerCase())) && (difficulty === "All" || t.difficulty === difficulty) && (surface === "All" || t.surface === surface)), [city, difficulty, surface]);
   const selected = filtered.find(t => t.id === selectedId) ?? filtered[0];
 

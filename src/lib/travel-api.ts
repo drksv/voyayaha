@@ -1,6 +1,6 @@
 import type { TravelMemory } from "@/components/travel/travel-memories-map";
 
-const WORDPRESS_BASE = import.meta.env.VITE_WORDPRESS_API_BASE_URL?.replace(/\/$/, "") || "";
+const WORDPRESS_BASE = (import.meta.env.VITE_WORDPRESS_API_BASE_URL?.replace(/\/$/, "") || "https://voyayaha.com");
 const RENDER_BASE = import.meta.env.VITE_TRAVEL_API_BASE_URL?.replace(/\/$/, "") || "https://backend-eqzz.onrender.com";
 const MEMORY_SUBMIT_URL = import.meta.env.VITE_TRAVEL_MEMORY_SUBMIT_URL?.replace(/\/$/, "") || (WORDPRESS_BASE ? `${WORDPRESS_BASE}/wp-json/voyayaha/v1/travel-memory` : "");
 
