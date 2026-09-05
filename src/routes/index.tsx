@@ -303,6 +303,32 @@ function Home() {
         </div>
       </section>
 
+      {/* Travel features */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8">
+          <SectionHeading
+            eyebrow="Travel tools"
+            title="Go beyond the destination"
+            blurb="Plan with local context, walk new trails, explore sacred India and keep your journeys on a living map."
+          />
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              ["/village-tourism", "Village Tourism", "Meet local life, crafts and community experiences."],
+              ["/hiking-trails", "Hiking Trails", "Find trails by place and difficulty."],
+              ["/travel-intel", "Travel Intel", "Check conditions before you go."],
+              ["/sacred-india", "Sacred India", "Explore destinations across faiths and circuits."],
+              ["/travel-memories", "Travel Memories", "See meaningful journeys on your map."],
+            ].map(([to, title, body]) => (
+              <Link key={to} to={to} className="group rounded-sm border border-border bg-card p-6 transition-colors hover:border-foreground/30">
+                <h3 className="font-display text-2xl">{title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
+                <span className="mt-5 inline-flex text-xs font-semibold text-primary group-hover:underline">Explore →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* My Voyayaha */}
       <section className="bg-stone text-stone-foreground">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1fr_1.1fr]">

@@ -8,6 +8,11 @@ import { useMyVoyayaha } from "@/lib/my-voyayaha";
 const navLinks = [
   { to: "/discover", label: "Discover" },
   ...categories.map((c) => ({ to: `/${c.slug}` as const, label: c.label })),
+  { to: "/village-tourism", label: "Village Tourism" },
+  { to: "/hiking-trails", label: "Hiking Trails" },
+  { to: "/travel-intel", label: "Travel Intel" },
+  { to: "/sacred-india", label: "Sacred India" },
+  { to: "/travel-memories", label: "Travel Memories" },
 ];
 
 export function SiteHeader() {
