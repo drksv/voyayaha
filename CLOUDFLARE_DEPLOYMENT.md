@@ -1,50 +1,81 @@
 # Voyayaha — Cloudflare deployment
 
-## What was added
+## What this revision fixes
 
-- `/travel-memories` — Leaflet + OpenStreetMap map, ready for the existing WordPress `travel_memory` REST endpoint.
-- `/village-tourism` — connected to the existing Render village experiences endpoint.
-- `/travel-intel` — connected to the existing Render travel-intel endpoint.
-- `/sacred-india` — filterable starter dataset for sacred destinations.
-- `/hiking-trails` — responsive trail page with demo data, ready for the hiking API.
-- Home page Travel Tools section and navigation links.
-- Leaflet is loaded from the public CDN so no extra npm package is required.
+- **Village Tourism** is inside **Village & Local**.
+- **Hiking Trails + Travel Memories** are inside **Hidden Places**.
+- **Travel Intel** is inside **Explore / Discover**.
+- **Sacred India** is inside **Spiritual Journeys**.
+- Old feature URLs redirect to their parent section.
+- Travel Intel and Village Tourism no longer call Render directly from the browser. They use same-origin `/api/...` server routes, which removes the browser CORS problem that caused **Failed to fetch**.
+- Travel Memories GET and POST now call WordPress directly from the browser. The supplied WordPress plugin enables the required CORS headers; this avoids a Cloudflare/TanStack server-side fetch returning 502 when the deployment cannot reach WordPress.
+- Travel Memory POST is sent directly by the browser to the WordPress moderation endpoint `/wp-json/voyayaha/v1/travel-memory`; no Node.js proxy is used.
+- Leaflet remains bundled through the installed npm package.
+- Travel Memories continues to use the existing WordPress `travel_memory` custom post type and moderation endpoint.
 
-## Before production
+## Production environment variables
 
-Set these environment variables in the Cloudflare deployment:
+These are the only variables required:
 
-`VITE_WORDPRESS_API_BASE_URL`
-- The origin of the existing WordPress site that contains the `travel_memory` CPT.
-- Example: `https://old-wordpress-site.example`
-- Do not point this at the new Voyayaha frontend unless WordPress is actually serving that API.
+`VITE_WORDPRESS_API_BASE_URL=https://voyayaha.com`
 
-`VITE_TRAVEL_API_BASE_URL`
-- Defaults to `https://backend-eqzz.onrender.com`.
+`VITE_TRAVEL_API_BASE_URL=https://backend-eqzz.onrender.com`
 
-The WordPress REST endpoint expected by the map is:
+Both routes also contain these values as defaults, so the site can still use the known existing services if the variables are omitted.
 
-`/wp-json/wp/v2/travel_memory?per_page=100`
+Because `VITE_*` values are embedded during the build, change them in Cloudflare and redeploy.
 
-The returned posts need latitude and longitude exposed in `post.meta.latitude` and `post.meta.longitude`. If the API returns the posts but not those fields, update the WordPress meta registration to use `show_in_rest => true`.
+## Server-side API proxy
 
-If WordPress is on a different origin, its REST API must allow browser requests from the new Voyayaha domain (CORS). Do not put WordPress passwords or private API keys in `VITE_*` variables; Vite exposes those values to the browser.
+The frontend calls:
 
-## Cloudflare Pages / Git integration
+- `/api/travel-intel?city=Jaipur`
+- `/api/village-experiences?location=Jaipur`
+- WordPress `/wp-json/wp/v2/travel_memory?per_page=100&_embed=1` for Travel Memories
+- WordPress `/wp-json/voyayaha/v1/travel-memory` for Travel Memory submissions
 
-1. Push this repository to GitHub.
-2. In Cloudflare, open **Workers & Pages** and select the existing Voyayaha project.
-3. Confirm it is connected to this GitHub repository and the `main` branch.
-4. Build command: `npm run build`.
-5. Build output: use the output configured by the existing TanStack Start/Cloudflare integration. Do not add a second framework preset or replace `vite.config.ts`.
-6. Add the two `VITE_*` variables under the project's environment variables for Preview and Production as appropriate.
-7. Save and trigger a new deployment.
-8. Test the generated `*.pages.dev` or Cloudflare preview URL before changing `voyayaha.com`.
-9. Test `/travel-memories`, `/village-tourism`, `/hiking-trails`, `/travel-intel`, and `/sacred-india`.
-10. Only after the preview is correct should you point the production domain to this deployment.
+Travel Memory GET/POST are direct browser-to-WordPress requests. The supplied plugin adds the required CORS headers.
+
+## WordPress plugin
+
+Keep the supplied plugin:
+
+`wordpress/voyayaha-travel-memories-api.php`
+
+It must be installed and activated on the WordPress site. It exposes:
+
+`/wp-json/wp/v2/travel_memory`
+
+and:
+
+`/wp-json/voyayaha/v1/travel-memory`
+
+Travel Memory submissions are created as **pending** posts for moderation.
+
+## Cloudflare build
+
+- Build command: `npm run build`
+- Do not add another framework preset.
+- Keep the existing `vite.config.ts`.
+- The project is a TanStack Start application.
+
+## After deployment
+
+Test these pages:
+
+1. `/village-local` — search a village or town.
+2. `/hidden-places` — hiking trails and Travel Memories map.
+3. `/discover` — Travel Intel; enter a city such as Jaipur.
+4. `/spiritual-journeys` — Sacred India.
+5. `/my-voyayaha` — personal saved/visited places and notes.
+
+Also test an actual Travel Memory submission. It should create a pending `travel_memory` post in WordPress.
 
 ## Important
 
-This repository uses TanStack Start file-based routing. New route files are under `src/routes/`. `src/routeTree.gen.ts` is generated; do not edit it manually.
+Do not delete `src/routeTree.gen.ts` before deployment. It is included with the API routes in this package so the new server endpoints are available immediately. If Lovable/TanStack regenerates the file during development, that is fine.
 
-The old WordPress `[travel_map]` shortcode is not copied into React. Its Leaflet/OpenStreetMap behavior has been recreated in `src/components/travel/travel-memories-map.tsx`.
+
+## Travel Memory submission endpoint
+
+The frontend POST goes directly to `https://voyayaha.com/wp-json/voyayaha/v1/travel-memory` (or the host configured in `VITE_WORDPRESS_API_BASE_URL`). The WordPress plugin `wordpress/voyayaha-travel-memories-api.php` must be active and allow the actual frontend origin.
