@@ -1,6 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowRight, Bookmark, Camera, Compass, MapPin, Search } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Bookmark, Camera, Compass, MapPin } from "lucide-react";
 
 import { PlaceCard } from "@/components/place-card";
 import heroDawn from "@/assets/hero-dawn.jpg";
@@ -8,7 +7,6 @@ import {
   categories,
   destinations,
   destinationsByCategory,
-  searchExamples,
   travelerDiscoveries,
 } from "@/lib/destinations";
 
@@ -68,9 +66,6 @@ function SectionHeading({
 }
 
 function Home() {
-  const navigate = useNavigate();
-  const [query, setQuery] = useState("");
-
   const featured = destinations.filter((d) => d.featured).slice(0, 3);
   const spiritual = destinationsByCategory("spiritual-journeys").slice(0, 3);
   const mindful = destinationsByCategory("mindful-escapes").slice(0, 3);
@@ -98,57 +93,15 @@ function Home() {
               experiences — then save, experience and remember them your way.
             </p>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                navigate({ to: "/discover", search: query ? { q: query } : {} });
-              }}
-              className="mt-8 max-w-2xl"
-            >
-              <label htmlFor="hero-search" className="sr-only">
-                Where do you want to discover?
-              </label>
-              <div className="flex items-center gap-3 rounded-full border border-stone-foreground/25 bg-background/95 px-5 py-3">
-                <Search className="size-5 text-muted-foreground" aria-hidden="true" />
-                <input
-                  id="hero-search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Where do you want to discover?"
-                  className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground"
-                />
-                <button
-                  type="submit"
-                  className="shrink-0 rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground"
-                >
-                  Search
-                </button>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {searchExamples.slice(0, 4).map((ex) => (
-                  <button
-                    key={ex}
-                    type="button"
-                    onClick={() =>
-                      navigate({ to: "/discover", search: { q: ex } })
-                    }
-                    className="rounded-full border border-stone-foreground/30 px-3 py-1.5 text-xs text-stone-foreground/90 hover:bg-stone-foreground/10"
-                  >
-                    {ex}
-                  </button>
-                ))}
-              </div>
-            </form>
-
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/discover"
+                to="discover"
                 className="rounded-full bg-sunrise px-6 py-3 text-sm font-semibold text-sunrise-foreground hover:opacity-90"
               >
                 Explore Places
               </Link>
               <Link
-                to="/my-voyayaha"
+                to="my-voyayaha"
                 className="rounded-full border border-stone-foreground/40 px-6 py-3 text-sm font-semibold text-stone-foreground hover:bg-stone-foreground/10"
               >
                 Create My Voyayaha
@@ -188,7 +141,7 @@ function Home() {
         <SectionHeading
           eyebrow="Featured discoveries"
           title="Places our travelers keep returning to"
-          to="/discover"
+          to="discover"
           linkLabel="See all places"
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -213,7 +166,7 @@ function Home() {
               you arrive.
             </p>
             <Link
-              to="/hidden-places"
+              to="hidden-places"
               className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:gap-3"
             >
               Start with hidden places
@@ -259,7 +212,7 @@ function Home() {
           eyebrow="Spiritual journeys"
           title="Sacred places, walked slowly"
           blurb="Temples, pilgrimage circuits, ashrams and river ghats — approached with attention rather than as a checklist."
-          to="/spiritual-journeys"
+          to="spiritual-journeys"
           linkLabel="All spiritual journeys"
         />
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -293,7 +246,7 @@ function Home() {
           eyebrow="Village & local"
           title="Travel that happens at someone's table"
           blurb="Crafts, kitchens, homestays and community experiences where the host is the destination."
-          to="/village-local"
+          to="village-local"
           linkLabel="All village experiences"
         />
         <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -313,11 +266,11 @@ function Home() {
           />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {[
-              ["/village-tourism", "Village Tourism", "Meet local life, crafts and community experiences."],
-              ["/hiking-trails", "Hiking Trails", "Find trails by place and difficulty."],
-              ["/travel-intel", "Travel Intel", "Check conditions before you go."],
-              ["/sacred-india", "Sacred India", "Explore destinations across faiths and circuits."],
-              ["/travel-memories", "Travel Memories", "See meaningful journeys on your map."],
+              ["/village-local", "Village Tourism", "Inside Village & Local: meet local life, crafts and community experiences."],
+              ["/hidden-places", "Hiking Trails", "Inside Hidden Places: find trails by place and difficulty."],
+              ["/discover", "Travel Intel", "Inside Explore: check conditions before you go."],
+              ["/spiritual-journeys", "Sacred India", "Inside Spiritual Journeys: explore faiths and pilgrimage circuits."],
+              ["/my-voyayaha", "Travel Memories", "Inside My Voyayaha: see and add meaningful journeys on your map."],
             ].map(([to, title, body]) => (
               <Link key={to} to={to} className="group rounded-sm border border-border bg-card p-6 transition-colors hover:border-foreground/30">
                 <h3 className="font-display text-2xl">{title}</h3>
@@ -342,7 +295,7 @@ function Home() {
               the village kitchen you keep talking about, the trail you still want to walk.
             </p>
             <Link
-              to="/my-voyayaha"
+              to="my-voyayaha"
               className="mt-8 inline-block rounded-full bg-sunrise px-6 py-3 text-sm font-semibold text-sunrise-foreground hover:opacity-90"
             >
               Create My Voyayaha
@@ -418,7 +371,7 @@ function Home() {
             Your next meaningful journey is waiting.
           </h2>
           <Link
-            to="/discover"
+            to="discover"
             className="mt-8 inline-block rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
           >
             Start Discovering
