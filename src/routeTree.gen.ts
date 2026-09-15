@@ -13,10 +13,23 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as HiddenPlacesRouteImport } from './routes/hidden-places'
+import { Route as HikingTrailsRouteImport } from './routes/hiking-trails'
 import { Route as MindfulEscapesRouteImport } from './routes/mindful-escapes'
 import { Route as MyVoyayahaRouteImport } from './routes/my-voyayaha'
+import { Route as SacredIndiaRouteImport } from './routes/sacred-india'
 import { Route as SpiritualJourneysRouteImport } from './routes/spiritual-journeys'
+import { Route as TravelIntelRouteImport } from './routes/travel-intel'
+import { Route as TravelMemoriesRouteImport } from './routes/travel-memories'
 import { Route as VillageLocalRouteImport } from './routes/village-local'
+import { Route as VillageTourismRouteImport } from './routes/village-tourism'
+import { Route as ApiHiddenExperiencesRouteImport } from './routes/api/hidden-experiences'
+import { Route as ApiItineraryRouteImport } from './routes/api/itinerary'
+import { Route as ApiSocialDiscoveryRouteImport } from './routes/api/social-discovery'
+import { Route as ApiSocialHiddenRouteImport } from './routes/api/social-hidden'
+import { Route as ApiTravelIntelRouteImport } from './routes/api/travel-intel'
+import { Route as ApiTravelMemoriesRouteImport } from './routes/api/travel-memories'
+import { Route as ApiTravelMemoryRouteImport } from './routes/api/travel-memory'
+import { Route as ApiVillageExperiencesRouteImport } from './routes/api/village-experiences'
 import { Route as PlacesSlugRouteImport } from './routes/places.$slug'
 import { Route as ApiPublicSitemapRouteImport } from './routes/api/public/sitemap'
 
@@ -40,6 +53,11 @@ const HiddenPlacesRoute = HiddenPlacesRouteImport.update({
   path: '/hidden-places',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HikingTrailsRoute = HikingTrailsRouteImport.update({
+  id: '/hiking-trails',
+  path: '/hiking-trails',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MindfulEscapesRoute = MindfulEscapesRouteImport.update({
   id: '/mindful-escapes',
   path: '/mindful-escapes',
@@ -50,14 +68,74 @@ const MyVoyayahaRoute = MyVoyayahaRouteImport.update({
   path: '/my-voyayaha',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SacredIndiaRoute = SacredIndiaRouteImport.update({
+  id: '/sacred-india',
+  path: '/sacred-india',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpiritualJourneysRoute = SpiritualJourneysRouteImport.update({
   id: '/spiritual-journeys',
   path: '/spiritual-journeys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TravelIntelRoute = TravelIntelRouteImport.update({
+  id: '/travel-intel',
+  path: '/travel-intel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TravelMemoriesRoute = TravelMemoriesRouteImport.update({
+  id: '/travel-memories',
+  path: '/travel-memories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VillageLocalRoute = VillageLocalRouteImport.update({
   id: '/village-local',
   path: '/village-local',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VillageTourismRoute = VillageTourismRouteImport.update({
+  id: '/village-tourism',
+  path: '/village-tourism',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHiddenExperiencesRoute = ApiHiddenExperiencesRouteImport.update({
+  id: '/api/hidden-experiences',
+  path: '/api/hidden-experiences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiItineraryRoute = ApiItineraryRouteImport.update({
+  id: '/api/itinerary',
+  path: '/api/itinerary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSocialDiscoveryRoute = ApiSocialDiscoveryRouteImport.update({
+  id: '/api/social-discovery',
+  path: '/api/social-discovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSocialHiddenRoute = ApiSocialHiddenRouteImport.update({
+  id: '/api/social-hidden',
+  path: '/api/social-hidden',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTravelIntelRoute = ApiTravelIntelRouteImport.update({
+  id: '/api/travel-intel',
+  path: '/api/travel-intel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTravelMemoriesRoute = ApiTravelMemoriesRouteImport.update({
+  id: '/api/travel-memories',
+  path: '/api/travel-memories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTravelMemoryRoute = ApiTravelMemoryRouteImport.update({
+  id: '/api/travel-memory',
+  path: '/api/travel-memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiVillageExperiencesRoute = ApiVillageExperiencesRouteImport.update({
+  id: '/api/village-experiences',
+  path: '/api/village-experiences',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlacesSlugRoute = PlacesSlugRouteImport.update({
@@ -76,10 +154,23 @@ export interface FileRoutesByFullPath {
   '/discover': typeof DiscoverRoute
   '/heritage': typeof HeritageRoute
   '/hidden-places': typeof HiddenPlacesRoute
+  '/hiking-trails': typeof HikingTrailsRoute
   '/mindful-escapes': typeof MindfulEscapesRoute
   '/my-voyayaha': typeof MyVoyayahaRoute
+  '/sacred-india': typeof SacredIndiaRoute
   '/spiritual-journeys': typeof SpiritualJourneysRoute
+  '/travel-intel': typeof TravelIntelRoute
+  '/travel-memories': typeof TravelMemoriesRoute
   '/village-local': typeof VillageLocalRoute
+  '/village-tourism': typeof VillageTourismRoute
+  '/api/hidden-experiences': typeof ApiHiddenExperiencesRoute
+  '/api/itinerary': typeof ApiItineraryRoute
+  '/api/social-discovery': typeof ApiSocialDiscoveryRoute
+  '/api/social-hidden': typeof ApiSocialHiddenRoute
+  '/api/travel-intel': typeof ApiTravelIntelRoute
+  '/api/travel-memories': typeof ApiTravelMemoriesRoute
+  '/api/travel-memory': typeof ApiTravelMemoryRoute
+  '/api/village-experiences': typeof ApiVillageExperiencesRoute
   '/places/$slug': typeof PlacesSlugRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
 }
@@ -88,10 +179,23 @@ export interface FileRoutesByTo {
   '/discover': typeof DiscoverRoute
   '/heritage': typeof HeritageRoute
   '/hidden-places': typeof HiddenPlacesRoute
+  '/hiking-trails': typeof HikingTrailsRoute
   '/mindful-escapes': typeof MindfulEscapesRoute
   '/my-voyayaha': typeof MyVoyayahaRoute
+  '/sacred-india': typeof SacredIndiaRoute
   '/spiritual-journeys': typeof SpiritualJourneysRoute
+  '/travel-intel': typeof TravelIntelRoute
+  '/travel-memories': typeof TravelMemoriesRoute
   '/village-local': typeof VillageLocalRoute
+  '/village-tourism': typeof VillageTourismRoute
+  '/api/hidden-experiences': typeof ApiHiddenExperiencesRoute
+  '/api/itinerary': typeof ApiItineraryRoute
+  '/api/social-discovery': typeof ApiSocialDiscoveryRoute
+  '/api/social-hidden': typeof ApiSocialHiddenRoute
+  '/api/travel-intel': typeof ApiTravelIntelRoute
+  '/api/travel-memories': typeof ApiTravelMemoriesRoute
+  '/api/travel-memory': typeof ApiTravelMemoryRoute
+  '/api/village-experiences': typeof ApiVillageExperiencesRoute
   '/places/$slug': typeof PlacesSlugRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
 }
@@ -101,10 +205,23 @@ export interface FileRoutesById {
   '/discover': typeof DiscoverRoute
   '/heritage': typeof HeritageRoute
   '/hidden-places': typeof HiddenPlacesRoute
+  '/hiking-trails': typeof HikingTrailsRoute
   '/mindful-escapes': typeof MindfulEscapesRoute
   '/my-voyayaha': typeof MyVoyayahaRoute
+  '/sacred-india': typeof SacredIndiaRoute
   '/spiritual-journeys': typeof SpiritualJourneysRoute
+  '/travel-intel': typeof TravelIntelRoute
+  '/travel-memories': typeof TravelMemoriesRoute
   '/village-local': typeof VillageLocalRoute
+  '/village-tourism': typeof VillageTourismRoute
+  '/api/hidden-experiences': typeof ApiHiddenExperiencesRoute
+  '/api/itinerary': typeof ApiItineraryRoute
+  '/api/social-discovery': typeof ApiSocialDiscoveryRoute
+  '/api/social-hidden': typeof ApiSocialHiddenRoute
+  '/api/travel-intel': typeof ApiTravelIntelRoute
+  '/api/travel-memories': typeof ApiTravelMemoriesRoute
+  '/api/travel-memory': typeof ApiTravelMemoryRoute
+  '/api/village-experiences': typeof ApiVillageExperiencesRoute
   '/places/$slug': typeof PlacesSlugRoute
   '/api/public/sitemap': typeof ApiPublicSitemapRoute
 }
@@ -115,10 +232,23 @@ export interface FileRouteTypes {
     | '/discover'
     | '/heritage'
     | '/hidden-places'
+    | '/hiking-trails'
     | '/mindful-escapes'
     | '/my-voyayaha'
+    | '/sacred-india'
     | '/spiritual-journeys'
+    | '/travel-intel'
+    | '/travel-memories'
     | '/village-local'
+    | '/village-tourism'
+    | '/api/hidden-experiences'
+    | '/api/itinerary'
+    | '/api/social-discovery'
+    | '/api/social-hidden'
+    | '/api/travel-intel'
+    | '/api/travel-memories'
+    | '/api/travel-memory'
+    | '/api/village-experiences'
     | '/places/$slug'
     | '/api/public/sitemap'
   fileRoutesByTo: FileRoutesByTo
@@ -127,10 +257,23 @@ export interface FileRouteTypes {
     | '/discover'
     | '/heritage'
     | '/hidden-places'
+    | '/hiking-trails'
     | '/mindful-escapes'
     | '/my-voyayaha'
+    | '/sacred-india'
     | '/spiritual-journeys'
+    | '/travel-intel'
+    | '/travel-memories'
     | '/village-local'
+    | '/village-tourism'
+    | '/api/hidden-experiences'
+    | '/api/itinerary'
+    | '/api/social-discovery'
+    | '/api/social-hidden'
+    | '/api/travel-intel'
+    | '/api/travel-memories'
+    | '/api/travel-memory'
+    | '/api/village-experiences'
     | '/places/$slug'
     | '/api/public/sitemap'
   id:
@@ -139,10 +282,23 @@ export interface FileRouteTypes {
     | '/discover'
     | '/heritage'
     | '/hidden-places'
+    | '/hiking-trails'
     | '/mindful-escapes'
     | '/my-voyayaha'
+    | '/sacred-india'
     | '/spiritual-journeys'
+    | '/travel-intel'
+    | '/travel-memories'
     | '/village-local'
+    | '/village-tourism'
+    | '/api/hidden-experiences'
+    | '/api/itinerary'
+    | '/api/social-discovery'
+    | '/api/social-hidden'
+    | '/api/travel-intel'
+    | '/api/travel-memories'
+    | '/api/travel-memory'
+    | '/api/village-experiences'
     | '/places/$slug'
     | '/api/public/sitemap'
   fileRoutesById: FileRoutesById
@@ -152,10 +308,23 @@ export interface RootRouteChildren {
   DiscoverRoute: typeof DiscoverRoute
   HeritageRoute: typeof HeritageRoute
   HiddenPlacesRoute: typeof HiddenPlacesRoute
+  HikingTrailsRoute: typeof HikingTrailsRoute
   MindfulEscapesRoute: typeof MindfulEscapesRoute
   MyVoyayahaRoute: typeof MyVoyayahaRoute
+  SacredIndiaRoute: typeof SacredIndiaRoute
   SpiritualJourneysRoute: typeof SpiritualJourneysRoute
+  TravelIntelRoute: typeof TravelIntelRoute
+  TravelMemoriesRoute: typeof TravelMemoriesRoute
   VillageLocalRoute: typeof VillageLocalRoute
+  VillageTourismRoute: typeof VillageTourismRoute
+  ApiHiddenExperiencesRoute: typeof ApiHiddenExperiencesRoute
+  ApiItineraryRoute: typeof ApiItineraryRoute
+  ApiSocialDiscoveryRoute: typeof ApiSocialDiscoveryRoute
+  ApiSocialHiddenRoute: typeof ApiSocialHiddenRoute
+  ApiTravelIntelRoute: typeof ApiTravelIntelRoute
+  ApiTravelMemoriesRoute: typeof ApiTravelMemoriesRoute
+  ApiTravelMemoryRoute: typeof ApiTravelMemoryRoute
+  ApiVillageExperiencesRoute: typeof ApiVillageExperiencesRoute
   PlacesSlugRoute: typeof PlacesSlugRoute
   ApiPublicSitemapRoute: typeof ApiPublicSitemapRoute
 }
@@ -190,6 +359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HiddenPlacesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hiking-trails': {
+      id: '/hiking-trails'
+      path: '/hiking-trails'
+      fullPath: '/hiking-trails'
+      preLoaderRoute: typeof HikingTrailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mindful-escapes': {
       id: '/mindful-escapes'
       path: '/mindful-escapes'
@@ -204,6 +380,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyVoyayahaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sacred-india': {
+      id: '/sacred-india'
+      path: '/sacred-india'
+      fullPath: '/sacred-india'
+      preLoaderRoute: typeof SacredIndiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/spiritual-journeys': {
       id: '/spiritual-journeys'
       path: '/spiritual-journeys'
@@ -211,11 +394,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpiritualJourneysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/travel-intel': {
+      id: '/travel-intel'
+      path: '/travel-intel'
+      fullPath: '/travel-intel'
+      preLoaderRoute: typeof TravelIntelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/travel-memories': {
+      id: '/travel-memories'
+      path: '/travel-memories'
+      fullPath: '/travel-memories'
+      preLoaderRoute: typeof TravelMemoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/village-local': {
       id: '/village-local'
       path: '/village-local'
       fullPath: '/village-local'
       preLoaderRoute: typeof VillageLocalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/village-tourism': {
+      id: '/village-tourism'
+      path: '/village-tourism'
+      fullPath: '/village-tourism'
+      preLoaderRoute: typeof VillageTourismRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/hidden-experiences': {
+      id: '/api/hidden-experiences'
+      path: '/api/hidden-experiences'
+      fullPath: '/api/hidden-experiences'
+      preLoaderRoute: typeof ApiHiddenExperiencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/itinerary': {
+      id: '/api/itinerary'
+      path: '/api/itinerary'
+      fullPath: '/api/itinerary'
+      preLoaderRoute: typeof ApiItineraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/social-discovery': {
+      id: '/api/social-discovery'
+      path: '/api/social-discovery'
+      fullPath: '/api/social-discovery'
+      preLoaderRoute: typeof ApiSocialDiscoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/social-hidden': {
+      id: '/api/social-hidden'
+      path: '/api/social-hidden'
+      fullPath: '/api/social-hidden'
+      preLoaderRoute: typeof ApiSocialHiddenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/travel-intel': {
+      id: '/api/travel-intel'
+      path: '/api/travel-intel'
+      fullPath: '/api/travel-intel'
+      preLoaderRoute: typeof ApiTravelIntelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/travel-memories': {
+      id: '/api/travel-memories'
+      path: '/api/travel-memories'
+      fullPath: '/api/travel-memories'
+      preLoaderRoute: typeof ApiTravelMemoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/travel-memory': {
+      id: '/api/travel-memory'
+      path: '/api/travel-memory'
+      fullPath: '/api/travel-memory'
+      preLoaderRoute: typeof ApiTravelMemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/village-experiences': {
+      id: '/api/village-experiences'
+      path: '/api/village-experiences'
+      fullPath: '/api/village-experiences'
+      preLoaderRoute: typeof ApiVillageExperiencesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/places/$slug': {
@@ -240,10 +500,23 @@ const rootRouteChildren: RootRouteChildren = {
   DiscoverRoute: DiscoverRoute,
   HeritageRoute: HeritageRoute,
   HiddenPlacesRoute: HiddenPlacesRoute,
+  HikingTrailsRoute: HikingTrailsRoute,
   MindfulEscapesRoute: MindfulEscapesRoute,
   MyVoyayahaRoute: MyVoyayahaRoute,
+  SacredIndiaRoute: SacredIndiaRoute,
   SpiritualJourneysRoute: SpiritualJourneysRoute,
+  TravelIntelRoute: TravelIntelRoute,
+  TravelMemoriesRoute: TravelMemoriesRoute,
   VillageLocalRoute: VillageLocalRoute,
+  VillageTourismRoute: VillageTourismRoute,
+  ApiHiddenExperiencesRoute: ApiHiddenExperiencesRoute,
+  ApiItineraryRoute: ApiItineraryRoute,
+  ApiSocialDiscoveryRoute: ApiSocialDiscoveryRoute,
+  ApiSocialHiddenRoute: ApiSocialHiddenRoute,
+  ApiTravelIntelRoute: ApiTravelIntelRoute,
+  ApiTravelMemoriesRoute: ApiTravelMemoriesRoute,
+  ApiTravelMemoryRoute: ApiTravelMemoryRoute,
+  ApiVillageExperiencesRoute: ApiVillageExperiencesRoute,
   PlacesSlugRoute: PlacesSlugRoute,
   ApiPublicSitemapRoute: ApiPublicSitemapRoute,
 }
