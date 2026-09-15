@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Voyayaha Travel Memories API
  * Description: Adds a moderated public submission endpoint for Voyayaha Travel Memories and exposes latitude/longitude/location/date/image metadata through WordPress REST API.
- * Version: 1.0.0
+ * Version: 1.3.0
  */
 
 if (!defined('ABSPATH')) exit;
@@ -21,11 +21,45 @@ add_action('init', function () {
 
 add_action('rest_api_init', function () {
     register_rest_route('voyayaha/v1', '/travel-memory', [
+        'methods' => 'GET',
+        'permission_callback' => '__return_true',
+        'callback' => 'voyayaha_get_travel_memories',
+    ]);
+    register_rest_route('voyayaha/v1', '/travel-memory', [
         'methods' => 'POST',
         'permission_callback' => '__return_true',
         'callback' => 'voyayaha_submit_travel_memory',
     ]);
 });
+
+function voyayaha_get_travel_memories(WP_REST_Request $request) {
+    if (!post_type_exists('travel_memory')) {
+        return new WP_Error('travel_memory_post_type_missing', 'The travel_memory post type is not registered.', ['status' => 503]);
+    }
+    $posts = get_posts([
+        'post_type' => 'travel_memory',
+        'post_status' => 'publish',
+        'posts_per_page' => min(100, max(1, (int)($request->get_param('per_page') ?: 100))),
+        'orderby' => 'date',
+        'order' => 'DESC',
+    ]);
+    $items = [];
+    foreach ($posts as $post) {
+        $items[] = [
+            'id' => $post->ID,
+            'title' => ['rendered' => get_the_title($post)],
+            'content' => ['rendered' => apply_filters('the_content', $post->post_content)],
+            'meta' => [
+                'latitude' => get_post_meta($post->ID, 'latitude', true),
+                'longitude' => get_post_meta($post->ID, 'longitude', true),
+                'location' => get_post_meta($post->ID, 'location', true),
+                'date' => get_post_meta($post->ID, 'date', true),
+                'image' => get_post_meta($post->ID, 'image', true),
+            ],
+        ];
+    }
+    return rest_ensure_response($items);
+}
 
 function voyayaha_submit_travel_memory(WP_REST_Request $request) {
     $ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : 'unknown';
@@ -70,19 +104,70 @@ function voyayaha_submit_travel_memory(WP_REST_Request $request) {
     return new WP_REST_Response(['success' => true, 'id' => $post_id, 'message' => 'Travel memory submitted for review.'], 201);
 }
 
-add_action('rest_api_init', function () {
-    add_filter('rest_pre_serve_request', function ($served, $result, $request) {
-        if (strpos($request->get_route(), '/voyayaha/v1/travel-memory') === 0 || strpos($request->get_route(), '/wp/v2/travel_memory') !== false) {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-            header('Access-Control-Allow-Headers: Content-Type');
-        }
-        return $served;
-    }, 10, 3);
-});
+/**
+ * CORS for the public Travel Memories endpoint.
+ *
+ * The endpoint is intentionally public and the frontend does not send cookies
+ * or WordPress authentication. We reflect only known Voyayaha frontend origins
+ * instead of using a wildcard, and we explicitly handle OPTIONS preflight.
+ */
+function voyayaha_travel_memory_is_route() {
+    $uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+    return strpos($uri, '/wp-json/voyayaha/v1/travel-memory') !== false;
+}
 
-add_action('init', function () {
-    if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS' && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/wp-json/voyayaha/v1/travel-memory') !== false) {
-        header('Access-Control-Allow-Origin: *'); header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); header('Access-Control-Allow-Headers: Content-Type'); status_header(200); exit;
+function voyayaha_travel_memory_allowed_origin() {
+    $origin = isset($_SERVER['HTTP_ORIGIN']) ? esc_url_raw(wp_unslash($_SERVER['HTTP_ORIGIN'])) : '';
+    if (!$origin) return '';
+
+    $allowed = [
+        'https://voyayaha.com',
+        'https://www.voyayaha.com',
+    ];
+
+    // Also allow local development origins.
+    if (in_array($origin, $allowed, true) || preg_match('#^https?://localhost(?::\\d+)?$#', $origin) || preg_match('#^https?://127\\.0\\.0\\.1(?::\\d+)?$#', $origin)) {
+        return $origin;
     }
-});
+
+    // If the production frontend is served from another custom domain, set
+    // VOYAYAHA_FRONTEND_ORIGIN in wp-config.php to that exact origin.
+    if (defined('VOYAYAHA_FRONTEND_ORIGIN') && VOYAYAHA_FRONTEND_ORIGIN && hash_equals(rtrim((string) VOYAYAHA_FRONTEND_ORIGIN, '/'), rtrim($origin, '/'))) {
+        return $origin;
+    }
+
+    return '';
+}
+
+function voyayaha_travel_memory_cors_headers() {
+    if (!voyayaha_travel_memory_is_route()) return;
+    $origin = voyayaha_travel_memory_allowed_origin();
+    if (!$origin) return;
+
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Accept, Content-Type, X-WP-Nonce');
+    header('Access-Control-Max-Age: 600');
+    header('Vary: Origin', false);
+}
+
+add_action('send_headers', 'voyayaha_travel_memory_cors_headers', 20);
+
+add_filter('rest_pre_serve_request', function ($served, $result, $request) {
+    if (strpos($request->get_route(), '/voyayaha/v1/travel-memory') === 0) {
+        voyayaha_travel_memory_cors_headers();
+    }
+    return $served;
+}, 10, 3);
+
+// WordPress normally answers REST OPTIONS requests. This explicit handler is
+// only for the Travel Memory route and avoids host/security-layer interference.
+add_action('init', function () {
+    if (!voyayaha_travel_memory_is_route()) return;
+    if (isset($_SERVER['REQUEST_METHOD']) && strtoupper($_SERVER['REQUEST_METHOD']) === 'OPTIONS') {
+        voyayaha_travel_memory_cors_headers();
+        status_header(204);
+        exit;
+    }
+}, 1);
+
