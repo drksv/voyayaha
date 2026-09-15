@@ -1,3 +1,4 @@
+import voyayahaLogo from "@/assets/voyayaha-logo.jpeg";
 import { Link } from "@tanstack/react-router";
 
 import { categories } from "@/lib/destinations";
@@ -7,7 +8,7 @@ export function SiteFooter() {
     <footer className="mt-24 border-t border-border bg-secondary/50">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 md:grid-cols-4">
         <div className="md:col-span-2">
-          <p className="font-display text-2xl text-foreground">Voyayaha</p>
+          <img src={voyayahaLogo} alt="Voyayaha" className="h-12 w-auto max-w-[190px] object-contain" />
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Discover places that mean something. Find hidden places, spiritual journeys, mindful
             escapes and authentic local experiences — then save, experience and remember them your

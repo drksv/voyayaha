@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { PlaceCard } from "@/components/place-card";
 import { categories, destinationsByCategory, getCategory, type CategorySlug } from "@/lib/destinations";
 
-export function CategoryPage({ slug }: { slug: CategorySlug }) {
+export function CategoryPage({ slug, showCollection = true }: { slug: CategorySlug; showCollection?: boolean }) {
   const category = getCategory(slug);
   const places = destinationsByCategory(slug);
 
@@ -51,14 +51,18 @@ export function CategoryPage({ slug }: { slug: CategorySlug }) {
         ))}
       </div>
 
-      <p className="mt-10 text-sm text-muted-foreground">
-        {places.length} {places.length === 1 ? "place" : "places"} in this collection
-      </p>
-      <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {places.map((place) => (
-          <PlaceCard key={place.slug} place={place} />
-        ))}
-      </div>
+      {showCollection && (
+        <>
+          <p className="mt-10 text-sm text-muted-foreground">
+            {places.length} {places.length === 1 ? "place" : "places"} in this collection
+          </p>
+          <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {places.map((place) => (
+              <PlaceCard key={place.slug} place={place} />
+            ))}
+          </div>
+        </>
+      )}
 
       <section className="mt-20 rounded-sm border border-border bg-card p-8 sm:p-12">
         <h2 className="text-2xl text-foreground sm:text-3xl">Make this collection yours</h2>
